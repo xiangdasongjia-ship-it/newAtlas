@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>やる気スイッチ</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+        h1 { color: #333; }
+        #escape-button {
+            padding: 20px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            background-color: #ff4757;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            position: absolute;
+            transition: 0.1s;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>私の「やる気」スイッチ</h1>
+    <p>クリックできたら、今日から本気出します。</p>
+    
+    <button id="escape-button">やる気スイッチ</button>
+
+    <script>
+        const btn = document.getElementById('escape-button');
+
+        // マウスが近づいたら逃げる処理
+        btn.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - btn.clientWidth);
+            const y = Math.random() * (window.innerHeight - btn.clientHeight);
+            
+            btn.style.left = `${x}px`;
+            btn.style.top = `${y}px`;
+        });
+
+        // 万が一クリックできた時のお祝い
+        btn.addEventListener('click', () => {
+            alert('おめでとうございます！明日から本気出しましょう！');
+        });
+    </script>
+</body>
+</html>
