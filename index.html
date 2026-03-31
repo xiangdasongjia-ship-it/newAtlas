@@ -3,23 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calm Bubble</title>
+    <title>Custom Calm Bubble</title>
     <style>
-        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #e0f2f1; font-family: sans-serif; overflow: hidden; }
-        .container { text-align: center; }
-        .bubble { width: 120px; height: 120px; background: #80deea; border-radius: 50%; margin: 0 auto 30px; animation: breathe 8s infinite ease-in-out; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
-        .text { color: #00796b; font-size: 1.2rem; transition: 0.5s; }
-        @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(2.2); background: #4db6ac; } }
+        :root { --bg: #e0f2f1; --accent: #4db6ac; --text: #00796b; }
+        body { margin: 0; font-family: sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        .bubble { width: 100px; height: 100px; background: #80deea; border-radius: 50%; margin-bottom: 30px; transition: transform 0.5s ease-in-out; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .status { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; }
+        .controls { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-size: 0.9rem; }
+        .controls label { display: block; margin: 5px 0; }
+        input { width: 50px; padding: 3px; border: 1px solid #ccc; border-radius: 5px; text-align: center; }
+        button { margin-top: 10px; background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="bubble"></div>
-    <div id="t" class="text">ゆっくり吸って...</div>
+
+<div id="bubble" class="bubble"></div>
+<div id="status" class="status">準備中...</div>
+
+<div class="controls">
+    <label>吸う (秒): <input type="number" id="in" value="4"></label>
+    <label>止める (秒): <input type="number" id="hold" value="4"></label>
+    <label>吐く (秒): <input type="number" id="out" value="4"></label>
+    <button onclick="start()">設定を反映して開始</button>
 </div>
+
 <script>
-    const t = document.getElementById('t');
-    setInterval(() => { t.innerText = t.innerText === 'ゆっくり吸って...' ? '細く長く吐いて...' : 'ゆっくり吸って...'; }, 4000);
+    const bubble = document.getElementById('bubble');
+    const status = document.getElementById('status');
+    let timer;
+
+    function start() {
+        clearTimeout(timer);
+        const secIn = parseInt(document.getElementById('in').value) * 1000;
+        const secHold = parseInt(document.getElementById('hold').value) * 1000;
+        const secOut = parseInt(document.getElementById('out').value) * 1000;
+
+        function stepIn() {
+            status.innerText = "ゆっくり吸って...";
+            bubble.style.transition = `transform ${secIn}ms ease-in-out`;
+            bubble.style.transform = "scale(2.5)";
+            timer = setTimeout(stepHold, secIn);
+        }
+
+        function stepHold() {
+            status.innerText = "止めて...";
+            timer = setTimeout(stepOut, secHold);
+        }
+
+        function stepOut() {
+            status.innerText = "細く長く吐いて...";
+            bubble.style.transition = `transform ${secOut}ms ease-in-out`;
+            bubble.style.transform = "scale(1)";
+            timer = setTimeout(stepIn, secOut);
+        }
+
+        stepIn();
+    }
+    start();
 </script>
 </body>
 </html>
